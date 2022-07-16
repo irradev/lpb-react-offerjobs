@@ -1,12 +1,18 @@
 import React from 'react';
-import { useAppSelector } from '../hooks/useRedux';
-import { MainTabs, TopNavbar, FooterDesktop } from '../components/ui/';
+import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
+import {
+   MainTabs,
+   TopNavbar,
+   FooterDesktop,
+   ButtonCloseSlide,
+} from '../components/ui/';
 import { JobInfoView, JobsView } from '../views/';
+import { setOpenRightSlide } from '../store';
 
 export const MainLayout = () => {
    return (
       <>
-         <div className="fixed md:static h-screen w-screen md:w-full  ">
+         <div className="fixed md:static h-screen w-screen md:w-full bg-slate-200">
             <TopNavbar />
             {/* <div className="absolute bg-red-200">Sidebar</div> */}
             <MainContainer />
@@ -19,7 +25,7 @@ export const MainLayout = () => {
 
 const MainContainer = () => {
    return (
-      <div className="h-full pb-16 md:pb-12 flex justify-center">
+      <div className="h-full pb-16 md:pb-12 flex justify-center ">
          <LeftContainer />
          <RightContainer />
       </div>
@@ -36,12 +42,13 @@ const LeftContainer = () => {
 
 const RightContainer = () => {
    const { isOpenRightSlide } = useAppSelector((state) => state.ui);
+   const dispatch = useAppDispatch();
 
    return (
       <div
          className={`
-         pb-5 
-         absolute right-0
+         pb-16
+         fixed right-0
          h-full w-full max-w-md 
          z-[60] md:z-0 
          md:static md:right-0 
@@ -52,6 +59,12 @@ const RightContainer = () => {
       `}
       >
          <JobInfoView />
+         <div className="flex justify-center items-center w-full h-12 relative md:hidden">
+            <ButtonCloseSlide
+               isOpenSlide={isOpenRightSlide}
+               onClick={() => dispatch(setOpenRightSlide(false))}
+            />
+         </div>
       </div>
    );
 };

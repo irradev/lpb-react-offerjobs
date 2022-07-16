@@ -1,4 +1,5 @@
 export * from './CardContainer';
+export * from './ButtonCloseSlide';
 export * from './FooterDesktop';
 export * from './HalfViewInfo';
 export * from './MainTabs';
