@@ -12,7 +12,7 @@ export const TopBarMobile: FC<TopBarMobileProps> = ({ title }) => {
          bg-white 
          border-b border-b-gray-300
          p-2 
-         z-10 
+         z-10
          sticky top-0 
          w-full 
          md:hidden

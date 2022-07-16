@@ -1,22 +1,28 @@
+import { FC, useCallback } from 'react';
 import confetti from 'canvas-confetti';
-import React, { FC, ReactElement, useCallback } from 'react';
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
-import { addToFavoriteJobs, removeFromFavoriteJobs } from '../../../store';
-import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
+import {
+   addToFavoriteJobs,
+   removeFromFavoriteJobs,
+   setOpenRightSlide,
+   setSelectedJob,
+} from '../store';
+import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
+import { JobCardActionButton } from './';
 
-interface ActionButtonsContainerProps {
-   // isInFavorites: boolean;
+interface JobCardActionButtonsContainerProps {
    jobId: number;
-   // handleFavoritesClick: () => void;
+   wichFather: 'joblist' | 'jobinfo';
 }
 
-export const ActionButtonsContainer: FC<ActionButtonsContainerProps> = ({
-   // isInFavorites,
-   jobId,
-   // handleFavoritesClick,
-}) => {
+export const JobCardActionButtonsContainer: FC<
+   JobCardActionButtonsContainerProps
+> = ({ jobId, wichFather }) => {
    const dispatch = useAppDispatch();
+   const { isOpenRightSlide } = useAppSelector((state) => state.ui);
    const { favoriteJobs } = useAppSelector((state) => state.user);
+   const { selectedJob } = useAppSelector((state) => state.jobs);
+
    const handleFavoritesClick = useCallback(
       (jobId: number) => {
          console.log(favoriteJobs);
@@ -39,13 +45,18 @@ export const ActionButtonsContainer: FC<ActionButtonsContainerProps> = ({
       [favoriteJobs]
    );
 
+   const handleInfoClick = (jobId: number) => {
+      dispatch(setOpenRightSlide(true));
+      dispatch(setSelectedJob(jobId));
+   };
+
    return (
       <div className="flex  flex-col gap-2 md:flex-row-reverse md:justify-between mt-3">
-         <ActionButton
+         <JobCardActionButton
             onClick={() => handleFavoritesClick(jobId)}
-            bgColor={'gray-200'}
-            textColor={'slate-500'}
-            width={'full md:w-10'}
+            bgColor={'bg-zinc-200'}
+            textColor={'text-gray-700'}
+            width={'w-full md:w-10'}
             content={
                <div className="flex justify-center items-center gap-1">
                   {favoriteJobs.some((f) => f === jobId) ? (
@@ -67,54 +78,37 @@ export const ActionButtonsContainer: FC<ActionButtonsContainerProps> = ({
             }
          />
 
-         <div className="flex gap-1">
-            <ActionButton
-               bgColor={'orange-500'}
-               textColor={'white'}
-               width={'3/6'}
+         {/* ${selectedJob?.id === jobId ? 'md:opacity-0 md:translate-x-full' : ''} */}
+         <div
+            className={`
+            flex gap-1
+         `}
+         >
+            <JobCardActionButton
+               bgColor={'bg-sky-400'}
+               textColor={'text-white'}
+               width={`
+                  ${wichFather === 'jobinfo' ? 'w-full ' : 'w-3/6'}
+                  md:w-16
+               `}
                content={'apply'}
             />
-            <ActionButton
-               bgColor={'green-500'}
-               textColor={'white'}
-               width={'3/6'}
+            <JobCardActionButton
+               onClick={() => handleInfoClick(jobId)}
+               bgColor={'bg-blue-500'}
+               textColor={'text-white'}
+               width={'w-3/6 md:w-16'}
                content={'info'}
+               customClass={`
+                  ${wichFather === 'jobinfo' ? 'hidden' : ''}
+                  ${
+                     selectedJob?.id === jobId
+                        ? 'md:opacity-0 md:translate-x-full'
+                        : ''
+                  }
+               `}
             />
          </div>
       </div>
-   );
-};
-
-interface ActionButtonProps {
-   bgColor: string;
-   textColor: string;
-   width: string;
-   content: string | ReactElement;
-   onClick?: () => void;
-}
-
-const ActionButton: FC<ActionButtonProps> = ({
-   bgColor,
-   textColor,
-   width,
-   content,
-   onClick,
-}) => {
-   return (
-      <button
-         onClick={onClick}
-         className={`
-         flex justify-center items-center 
-         bg-${bgColor} 
-         text-${textColor} text-sm font-bold 
-         uppercase 
-         p-2 
-         rounded 
-         shadow-lg 
-         h-6 w-${width}
-      `}
-      >
-         {content}
-      </button>
    );
 };

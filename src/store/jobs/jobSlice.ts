@@ -47,8 +47,13 @@ export const jobSlice = createSlice({
          console.log('slice', action.payload);
          state.jobsToShow = action.payload;
       },
-      selectedJob: (state, action: PayloadAction<IJob>) => {
-         state.selectedJob = action.payload;
+      setSelectedJob: (state, action: PayloadAction<number>) => {
+         state.selectedJob = state.jobs.filter(
+            (job) => job.id === action.payload
+         )[0];
+      },
+      deleteSelectedJob: (state) => {
+         state.selectedJob = null;
       },
       // toggleFavoriteJobs: (state, action: PayloadAction<number>) => {
       //    let isInFavortie = false;
@@ -101,7 +106,8 @@ export const {
    addingNewJobs,
    loadJobs,
    setJobsToShow,
-   selectedJob,
+   setSelectedJob,
+   deleteSelectedJob,
    // toggleFavoriteJobs,
    // setViewedJob,
    // setAppliedJob,

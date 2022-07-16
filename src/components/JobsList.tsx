@@ -1,18 +1,14 @@
-import React, { FC, useCallback, useMemo } from 'react';
-import confetti from 'canvas-confetti';
+import React, { FC, useMemo } from 'react';
 
-import { addToFavoriteJobs, removeFromFavoriteJobs } from '../../store';
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-
-import { JobQueryIndex } from '../../views/JobsView';
-import { CardContainer } from '../ui/';
+import { JobQueryIndex } from '../views/';
+import { CardContainer } from './ui';
 import {
-   ActionButtonsContainer,
-   DescriptionContainer,
-   HeadContainer,
-   InfoContainer,
-} from '../pure/jobCard/';
-import { IJob } from '../../interfaces';
+   JobCardDescription,
+   JobCardHead,
+   JobCardInfo,
+   JobCardActionButtonsContainer,
+} from './';
+import { IJob } from '../interfaces';
 
 interface JobsListProps {
    jobs: IJob[];
@@ -33,27 +29,31 @@ export const JobsList: FC<JobsListProps> = ({
                   return (
                      <CardContainer key={`${job.id}_${job.title}`}>
                         <>
-                           <HeadContainer
+                           <JobCardHead
                               company_logo={job.company_logo}
                               company_name={job.company_name}
                               title={job.title}
                               publication_date={job.publication_date}
                            />
 
-                           <InfoContainer
+                           <JobCardInfo
                               location={job.candidate_required_location}
                               category={job.category}
                               jobType={job.job_type}
                               salary={job.salary}
                            />
 
-                           <DescriptionContainer
+                           <JobCardDescription
+                              isFullInfo={false}
                               description={job.description
                                  .replace(/<\/?[^>]+>/gi, ' ')
                                  .slice(0, 250)}
                            />
 
-                           <ActionButtonsContainer jobId={job.id} />
+                           <JobCardActionButtonsContainer
+                              jobId={job.id}
+                              wichFather={'joblist'}
+                           />
                         </>
                      </CardContainer>
                   );

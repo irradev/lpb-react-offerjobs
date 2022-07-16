@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { MdOutlineWorkOutline } from 'react-icons/md';
 import { IoIosStarOutline } from 'react-icons/io';
@@ -9,6 +9,7 @@ import { useAppSelector } from '../../hooks/useRedux';
 
 export const MainTabs = () => {
    const { badges } = useAppSelector((state) => state.user);
+   const { isOpenRightSlide } = useAppSelector((state) => state.ui);
 
    const tabs = useMemo(() => {
       let iconSize = 24;
@@ -45,7 +46,6 @@ export const MainTabs = () => {
          },
       ];
    }, [badges]);
-
    return (
       <div
          className={`
@@ -54,6 +54,10 @@ export const MainTabs = () => {
          bg-white
          text-gray-500
          py-2
+
+         ${isOpenRightSlide ? 'blur-sm' : ''}
+         md:blur-none
+         transition-blur duration-150 ease-in-out
       `}
       >
          {tabs.map((tab) => (

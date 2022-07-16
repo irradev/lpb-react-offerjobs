@@ -8,13 +8,13 @@ import {
 import { BiCategory, BiTimeFive } from 'react-icons/bi';
 import { FiDollarSign } from 'react-icons/fi';
 
-interface InfoContainerProps {
+interface JobCardInfoProps {
    location: string;
    category: string;
    jobType: string;
    salary: string;
 }
-export const InfoContainer: FC<InfoContainerProps> = ({
+export const JobCardInfo: FC<JobCardInfoProps> = ({
    location,
    category,
    jobType,
@@ -27,33 +27,32 @@ export const InfoContainer: FC<InfoContainerProps> = ({
       },
       {
          icon: <BiTimeFive />,
-         text: jobType.replace('_', ' ').toUpperCase(),
+         text:
+            jobType === ''
+               ? 'To treat'
+               : jobType.replace('_', ' ').toUpperCase(),
       },
       {
          icon: <HiOutlineLocationMarker />,
          text: location,
       },
-      {
-         icon: <BiCategory />,
-         text: category,
-      },
+      // {
+      //    icon: <BiCategory />,
+      //    text: category,
+      // },
    ];
 
    return (
-      <div className="flex justify-start items-center gap-2 flex-wrap text-sm text-orange-500 font-bold mt-3">
+      <div className="flex justify-start items-center gap-2 flex-wrap text-indigo-500 font-bold mt-3">
          {infos.map((info, index) => (
             <div
                key={`${index}_${info.text}_${category}_${jobType}`}
-               className="flex gap-1"
+               className="flex items-center gap-1"
             >
-               {info.icon}
-               <span className="text-xs">{info.text}</span>
+               <span className="text-md">{info.icon}</span>
+               <span className="text-sm">{info.text}</span>
             </div>
          ))}
       </div>
    );
-};
-
-const Separator = () => {
-   return <span className="px-2">|</span>;
 };
